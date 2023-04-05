@@ -1,27 +1,29 @@
-name: Publish NPM Package
+name: Release library
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
-          registry-url: https://npm.pkg.github.com/
-      - run: npm publish --access=public
+          node-version: "16"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@vixiaid"
+
+      ### Check in, install, and build as your project needs it
+
+      - name: Release package
+        run: |
+          npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_GITHUB_SECRET}}
+          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
