@@ -18,12 +18,9 @@ jobs:
         with:
           node-version: "16"
           registry-url: "https://registry.npmjs.org"
-          #scope: "@vixiaid"
-
-      ### Check in, install, and build as your project needs it
 
       - name: Release package
         run: |
-          npm publish
+          npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
